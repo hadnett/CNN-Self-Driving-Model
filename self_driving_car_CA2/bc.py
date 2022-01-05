@@ -5,9 +5,42 @@ from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def path_leaf(path):
     head, tail = ntpath.split(path)
     return tail
+
+
+def load_driving_data(datadir, df):
+    image_path = []
+    steering = []
+    throttle = []
+    reverse = []
+    speed = []
+    for i in range(len(df)):
+        indexed_data = df.iloc[i]
+        center, left, right = indexed_data[0], indexed_data[1], indexed_data[2]
+        image_path.append(os.path.join(datadir, center.strip()))
+        steering.append(float(indexed_data[3]))
+        throttle.append(float(indexed_data[4]))
+        reverse.append(float(indexed_data[5]))
+        speed.append(float(indexed_data[6]))
+        image_path.append(os.path.join(datadir, left.strip()))
+        steering.append(float(indexed_data[3]))
+        throttle.append(float(indexed_data[4]))
+        reverse.append(float(indexed_data[5]))
+        speed.append(float(indexed_data[6]))
+        image_path.append(os.path.join(datadir, right.strip()))
+        steering.append(float(indexed_data[3]))
+        throttle.append(float(indexed_data[4]))
+        reverse.append(float(indexed_data[5]))
+        speed.append(float(indexed_data[6]))
+    image_paths = np.asarray(image_path)
+    steering = np.asarray(steering)
+    throttle = np.asarray(throttle)
+    reverse = np.asarray(reverse)
+    speed = np.asarray(speed)
+    return image_paths, steering, throttle, reverse, speed
 
 
 data_dir = '/Volumes/HADNETT/4th_Year/Smart Tech/CA2_Data'
@@ -148,3 +181,10 @@ hist, _ = np.histogram(data['speed'], num_bins)
 plt.bar(center, hist)
 plt.plot((np.min(data['speed']), np.max(data['speed'])), (samples_per_bin, samples_per_bin))
 plt.show()
+
+image_paths, steering, throttle, reverse, speed = load_driving_data(data_dir + '/IMG', data)
+print("Image Paths", image_paths)
+print("Steering: ", steering)
+print("Throttle: ", throttle)
+print("Reverse: ", reverse)
+print("Speed: ", speed)
