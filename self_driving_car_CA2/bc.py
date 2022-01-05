@@ -86,3 +86,65 @@ plt.plot((np.min(data['throttle']), np.max(data['throttle'])), (samples_per_bin,
 plt.show()
 
 print(data.iloc[1])
+
+# Reverse Data
+
+num_bins = 3
+samples_per_bin = 75
+hist, bins = np.histogram(data['reverse'], num_bins)
+print(bins)
+center = (bins[:-1] + bins[1:])*0.5
+plt.bar(center, hist, width=0.05)
+plt.plot((np.min(data['reverse']), np.max(data['reverse'])), (samples_per_bin, samples_per_bin))
+plt.show()
+
+remove_list = []
+data = data.reset_index(drop=True)
+for j in range(num_bins):
+    list_ = []
+    for i in range(len(data['reverse'])):
+        if bins[j] <= data['reverse'][i] <= bins[j + 1]:
+            list_.append(i)
+    list_ = shuffle(list_)
+    list_ = list_[samples_per_bin:]
+    remove_list.extend(list_)
+
+print('Remove: ', len(remove_list))
+data.drop(data.index[remove_list], inplace=True)
+print('Remaining: ', len(data))
+
+hist, _ = np.histogram(data['reverse'], num_bins)
+plt.bar(center, hist, width=0.05)
+plt.plot((np.min(data['reverse']), np.max(data['reverse'])), (samples_per_bin, samples_per_bin))
+plt.show()
+
+# Speed Data
+
+num_bins = 10
+samples_per_bin = 30
+hist, bins = np.histogram(data['speed'], num_bins)
+print(bins)
+center = (bins[:-1] + bins[1:])*0.5
+plt.bar(center, hist)
+plt.plot((np.min(data['speed']), np.max(data['speed'])), (samples_per_bin, samples_per_bin))
+plt.show()
+
+remove_list = []
+data = data.reset_index(drop=True)
+for j in range(num_bins):
+    list_ = []
+    for i in range(len(data['speed'])):
+        if bins[j] <= data['speed'][i] <= bins[j + 1]:
+            list_.append(i)
+    list_ = shuffle(list_)
+    list_ = list_[samples_per_bin:]
+    remove_list.extend(list_)
+
+print('Remove: ', len(remove_list))
+data.drop(data.index[remove_list], inplace=True)
+print('Remaining: ', len(data))
+
+hist, _ = np.histogram(data['speed'], num_bins)
+plt.bar(center, hist)
+plt.plot((np.min(data['speed']), np.max(data['speed'])), (samples_per_bin, samples_per_bin))
+plt.show()
