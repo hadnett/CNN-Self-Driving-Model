@@ -3,6 +3,7 @@ import pandas as pd
 import ntpath
 from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 import numpy as np
 
 
@@ -188,3 +189,16 @@ print("Steering: ", steering)
 print("Throttle: ", throttle)
 print("Reverse: ", reverse)
 print("Speed: ", speed)
+
+combined_data = pd.DataFrame({'image': image_paths, 'throttle': throttle, 'reverse': reverse, 'speed': speed})
+
+X_train, X_valid, y_train, y_valid = train_test_split(combined_data, steering, test_size=0.2,
+                                                      random_state=0)
+print('Training samples: {}\nValid Samples: {}'.format(len(X_train), len(X_valid)))
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+axes[0].hist(y_train, bins=num_bins, width=0.05, color='blue')
+axes[0].set_title('Training set')
+axes[1].hist(y_valid, bins=num_bins, width=0.05, color='red')
+axes[1].set_title('Validation set')
+plt.show()
