@@ -11,17 +11,16 @@ import cv2
 sio = socketio.Server()
 app = Flask(__name__)
 
-speed_limit = 30
+# speed_limit = 30
 
 
 def img_preprocess(img):
-    #Crop the image
+    """
+    Preprocesses the images for model training via cropping, adding blur, resizing and normalising.
+    :param img: The image to be preprocesses for training.
+    :return: The preprocesses image.
+    """
     img = img[60:135, :, :]
-    # Convert color to yuv y-brightness, u,v chrominants(color)
-    # Recommend in the NVIDIA paper
-    # img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
-    # Apply Gaussian Blur
-    # As suggested by NVIDIA paper
     img = cv2.GaussianBlur(img, (3, 3), 0)
     img = cv2.resize(img, (64, 64))
     img = img/255
@@ -34,10 +33,13 @@ def telemetry(sid, data):
     image = np.asarray(image)
     image = img_preprocess(image)
     image = np.array([image])
-    speed = float(data['speed'])
-    throttle = 1.0 - speed/speed_limit
-    steering_angle = float(model.predict(image))
-
+    result = model.predict(image)
+    vector = np.vectorize(float)
+    x = vector(result)
+    steering_angle = x[0][0]
+    throttle = x[0][1]
+    throttle = float(throttle)
+    steering_angle = float(steering_angle)
     send_control(steering_angle, throttle)
 
 
@@ -55,6 +57,6 @@ def send_control(steering_angle, throttle):
 
 
 if __name__ == '__main__':
-    model = load_model('best_model_7.h5')
+    model = load_model('best_model_22.h5')
     app = socketio.Middleware(sio, app)
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
