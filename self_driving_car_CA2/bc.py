@@ -490,7 +490,7 @@ steps_per_epoch_val = int(np.ceil(X_valid.shape[0] / batch_size))
 
 
 es = EarlyStopping(monitor='val_loss', mode='auto', verbose=1, patience=3)
-mc = ModelCheckpoint('best_model_23.h5', monitor='val_loss', mode='min', verbose=1, save_best_only=True)
+mc = ModelCheckpoint('best_model_22.h5', monitor='val_loss', mode='min', verbose=1, save_best_only=True)
 
 h = model.fit(batch_generator(X_train, y_train, batch_size, 1), steps_per_epoch=steps_per_epoch_train*8,
               epochs=18,
@@ -507,4 +507,4 @@ plt.title('Loss')
 plt.xlabel('Epoch')
 plt.show()
 
-model.save('model_34.h5')
+model.save('model_33.h5')
