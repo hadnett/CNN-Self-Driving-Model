@@ -3,7 +3,9 @@
 ## Project: 
 This project was carried out by ***William Hadnett and Aaron Reihill*** as part of the final year ***Smart Technologies module***.
 We were tasked with creating a smart driving car that could autonomously drive in a simulator, provided by [Udacity](https://github.com/udacity/self-driving-car-sim "Udacity").
-When buidling the convolutional neural network modle that will carry out this function, we had to take into account preparing the data in which will allow our modle to output ***steering angle, throttle, reverse and speed***. 
+When buidling the convolutional neural network model that will carry out this function, we had to take into account preparing the data in which will allow our model to output ***steering angle and throttle***.
+
+This model outputs only steering angle and throttle - because steering angle can be used to change the direction of the car and the throttle is capable of controlling the cars brakes (Throttle=0) and speed (Throttle>0). Reverse was ignored for the purposes of this project as all values were zero.  
 
 After trial and error we came to the conclusion that ***model 22*** preforms the best. 
 
